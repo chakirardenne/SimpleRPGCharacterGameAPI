@@ -1,6 +1,5 @@
 ﻿using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
-using Tutorial_DotNet.Dto;
 
 namespace Tutorial_DotNet.Controllers;
 
