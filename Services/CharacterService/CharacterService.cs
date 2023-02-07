@@ -1,6 +1,5 @@
-﻿using Tutorial_DotNet.Dto;
+﻿namespace Tutorial_DotNet.Services.CharacterService;
 
-namespace Tutorial_DotNet.Services.CharacterService;
 public class CharacterService : ICharacterService {
     private readonly IMapper _mapper;
     private readonly DatabaseContext _context;
