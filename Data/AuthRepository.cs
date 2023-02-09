@@ -1,12 +1,18 @@
-﻿using System.Security.Cryptography;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Tutorial_DotNet.Data;
 
 public class AuthRepository : IAuthRepository {
     private readonly DatabaseContext _context;
-    public AuthRepository(DatabaseContext context) {
+    private readonly IConfiguration _configuration;
+
+    public AuthRepository(DatabaseContext context, IConfiguration configuration) {
         _context = context;
+        _configuration = configuration;
     }
 
     public async Task<ServiceResponse<int>> Register(User user, string password) {
@@ -38,7 +44,7 @@ public class AuthRepository : IAuthRepository {
             response.Message = "Wrong password";
         }
         else {
-            response.Data = user.Id.ToString();
+            response.Data = CreateToken(user);
         }
         return response;
     }
@@ -60,5 +66,25 @@ public class AuthRepository : IAuthRepository {
             var test = computedHash.SequenceEqual(passwordHash);
             return test;
         }
+    }
+
+    private string CreateToken(User user) {
+        var claims = new List<Claim>() {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username)
+        };
+        var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
+        if (appSettingsToken is null)
+            throw new Exception("AppSettings Token is null");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettingsToken));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        var TokenDescriptor = new SecurityTokenDescriptor {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.Now.AddDays(1),
+            SigningCredentials = credentials
+        };
+        JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(TokenDescriptor);
+        return tokenHandler.WriteToken(token);
     }
 }
