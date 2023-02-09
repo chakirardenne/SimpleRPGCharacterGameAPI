@@ -4,6 +4,7 @@ global using Tutorial_DotNet.Dto.Character;
 global using Microsoft.EntityFrameworkCore;
 global using AutoMapper;
 global using Tutorial_DotNet.Data;
+global using Tutorial_DotNet.Dto.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ICharacterService, CharacterService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 var app = builder.Build();
 

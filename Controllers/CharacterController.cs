@@ -36,8 +36,7 @@ public class CharacterController : ControllerBase {
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(GetCharacterResponseDto)) ]
     [ProducesResponseType(StatusCodes.Status404NotFound )]
-    public async Task<ActionResult<ServiceResponse<GetCharacterResponseDto>>> UpdateCharacter(UpdateCharacterDtoRequest updateCharacterDtoRequest)
-    {
+    public async Task<ActionResult<ServiceResponse<GetCharacterResponseDto>>> UpdateCharacter(UpdateCharacterDtoRequest updateCharacterDtoRequest) {
         var response = await _characterService.UpdateCharacter(updateCharacterDtoRequest);
         if (response.Data is null) {
             return NotFound(response);
@@ -48,8 +47,7 @@ public class CharacterController : ControllerBase {
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(bool)) ]
     [ProducesResponseType(StatusCodes.Status404NotFound )]
-    public async Task<ActionResult<ServiceResponse<bool>>> DeleteCharacter(int id)
-    {
+    public async Task<ActionResult<ServiceResponse<bool>>> DeleteCharacter(int id) {
         var response = await _characterService.DeleteCharacter(id);
         if (!response.Data) {
             return NotFound(response);
