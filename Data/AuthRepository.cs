@@ -78,13 +78,13 @@ public class AuthRepository : IAuthRepository {
             throw new Exception("AppSettings Token is null");
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettingsToken));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-        var TokenDescriptor = new SecurityTokenDescriptor {
+        var tokenDescriptor = new SecurityTokenDescriptor {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.Now.AddDays(1),
             SigningCredentials = credentials
         };
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(TokenDescriptor);
+        var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
 }

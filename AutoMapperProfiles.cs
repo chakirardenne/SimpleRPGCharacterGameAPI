@@ -1,6 +1,4 @@
-﻿using Tutorial_DotNet.Dto;
-
-namespace Tutorial_DotNet;
+﻿namespace Tutorial_DotNet;
 
 public class AutoMapperProfiles : Profile{
     public AutoMapperProfiles() { 

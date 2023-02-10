@@ -1,8 +1,11 @@
 ﻿using System.Net.Mime;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Tutorial_DotNet.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class CharacterController : ControllerBase {
@@ -12,6 +15,7 @@ public class CharacterController : ControllerBase {
         _characterService = characterService;
     }
 
+    [AllowAnonymous]
     [HttpGet("GetAll")]
     [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(List<GetCharacterResponseDto>)) ]
     public async Task<ActionResult<ServiceResponse<List<GetCharacterResponseDto>>>> GetAll() {
